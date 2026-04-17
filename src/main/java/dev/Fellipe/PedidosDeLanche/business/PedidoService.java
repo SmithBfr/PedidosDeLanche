@@ -4,6 +4,8 @@ import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
 import dev.Fellipe.PedidosDeLanche.infrastucture.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PedidoService {
 
@@ -31,15 +33,15 @@ public class PedidoService {
         double valorTipoLanche = 0.0;
 
         String tipo = pedido.getTipoLanche();
-        if(tipo != null) {
+        if (tipo != null) {
             tipo = tipo.toLowerCase();
         }
 
-        if(tipo == "hamburguer") {
+        if("hamburguer".equals(tipo)) {
             valorTipoLanche = 20.0;
-        } else if (tipo == "pastel") {
+        } else if ("pastel".equals(tipo)) {
             valorTipoLanche = 15.0;
-        } else if (tipo != "hamburguer" && tipo != "pastel") {
+        } else {
             valorTipoLanche = 12.0;
         }
 
@@ -50,11 +52,13 @@ public class PedidoService {
             valorTipoLanche -= valorTipoLanche * 0.10;
         }
 
+        pedido.setValorTotal(valorTipoLanche * pedido.getQuantidade());
 
+        repository.save(pedido);
 
-        return (valorTipoLanche * pedido.getQuantidade()) ;
+        return pedido.getValorTotal();
+
     }
-
 
     public Pedido buscarPedidoPorId(Long id) {
 
@@ -62,7 +66,7 @@ public class PedidoService {
                 () -> new RuntimeException("Pedido não encontrado"));
     }
 
-    public Pedido buscarTodosPedidos() {
-        return (Pedido) repository.findAll();
+    public List<Pedido> buscarTodosPedidos() {
+        return repository.findAll();
     }
 }

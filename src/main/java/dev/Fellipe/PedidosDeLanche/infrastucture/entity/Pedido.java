@@ -26,6 +26,8 @@ public class Pedido {
 
     private int quantidade;
 
+    private String bebida;
+
     private Double valorTotal;
 
     private String status;
