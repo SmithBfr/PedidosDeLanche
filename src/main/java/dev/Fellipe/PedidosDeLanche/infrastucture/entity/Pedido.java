@@ -1,18 +1,16 @@
-package dev.Fellipe.PedidosDeLanche.entity;
+package dev.Fellipe.PedidosDeLanche.infrastucture.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
+@Table(name = "pedidos")
 @Entity
 public class Pedido {
 
@@ -21,16 +19,18 @@ public class Pedido {
     private Long id;
 
     private String tipoLanche;
-    private String proteina;
-    private String acompanhamento;
-    private int quantidade;
-    private String bebida;
 
-    private double valorTotal;
+    private String proteina;
+
+    private String acompanhamento;
+
+    private int quantidade;
+
+    private Double valorTotal;
 
     private String status;
 
-    private LocalDateTime dataPedido = LocalDateTime.now();
+    private LocalDateTime criadoEm = LocalDateTime.now();
 
 
 }
