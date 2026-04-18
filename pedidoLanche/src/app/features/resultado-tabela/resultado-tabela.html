@@ -1,0 +1,28 @@
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Tipo de Lanche</th>
+    <th>Proteina</th>
+    <th>Acompanhamento</th>
+    <th>Quantidade</th>
+    <th>Bebida</th>
+    <th>Valor</th>
+    <th>Status</th>
+    <th>Data de Criação</th>
+  </tr>
+
+  <tr *ngFor="let item of dados">
+    <td>{{ item.id }}</td>
+    <td>{{ item.tipoLanche}}</td>
+    <td>{{ item.proteina }}</td>
+    <td>{{ item.acompanhamento }}</td>
+    <td>{{ item.quantidade }}</td>
+    <td>{{ item.bebida }}</td>
+    <td>{{ item.valorTotal }}</td>
+    <td>{{ item.status }}</td>
+    <td>{{ item.criadoEm }}</td>
+  </tr>
+</table>
+
+<button (click)="carregar()">Carregar</button>
+

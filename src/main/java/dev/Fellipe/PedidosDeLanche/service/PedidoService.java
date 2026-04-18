@@ -21,15 +21,22 @@ public class PedidoService {
     }
 
     public void criarPedido(Pedido pedido) {
+
+        double valor = calcularValorTotal(pedido);
+
         Pedido pedidos = Pedido.builder()
                 .tipoLanche(pedido.getTipoLanche())
                 .proteina(pedido.getProteina())
                 .acompanhamento(pedido.getAcompanhamento())
                 .quantidade(pedido.getQuantidade())
-                .valorTotal(calcularValorTotal(pedido))
                 .status("RECEBIDO")
                 .build();
 
+        pedidos.setValorTotal(valor);
+
+        Pedido pedidoSalvo = repository.save(pedidos);
+        pedidoProducer.enviarPedido(pedidoSalvo.getPedidoID());
+        System.out.println("SALVO ID: " + pedidoSalvo.getPedidoID());
 
     }
 
@@ -59,11 +66,8 @@ public class PedidoService {
 
         pedido.setValorTotal(valorTipoLanche * pedido.getQuantidade());
 
-        Pedido pedidoSalvo = repository.save(pedido);
-        pedidoProducer.enviarPedido(pedidoSalvo.getPedidoID());
-        System.out.println("SALVO ID: " + pedidoSalvo.getPedidoID());
 
-        return pedido.getValorTotal();
+        return valorTipoLanche * pedido.getQuantidade();
 
     }
 

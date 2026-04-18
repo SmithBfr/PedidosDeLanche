@@ -34,7 +34,7 @@ public class Pedido {
     @Column(length = 20)
     private String bebida;
 
-    @Column(precision = 10, scale = 2)
+
     private Double valorTotal;
 
     @Column(length = 20)
