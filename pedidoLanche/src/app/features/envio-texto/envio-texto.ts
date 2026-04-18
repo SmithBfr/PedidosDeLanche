@@ -20,16 +20,12 @@ export class EnvioTexto {
 
       let texto = this.texto;
 
-        texto = texto.padEnd(40, ' ');
+        if (texto.length != 40) {
+           alert('O texto deve conter exatamente 40 caracteres.');
+           return;
+        }
 
-        console.log('Tamanho:', texto.length);
-
-
-      const headers = new HttpHeaders({
-          'Content-Type': 'text/plain'
-          });
-
-      console.log('texto enviado:', texto);
+      console.log('Tamanho:', texto.length);
 
       this.http.post(
         'http://localhost:8080/pedidos',
@@ -40,6 +36,9 @@ export class EnvioTexto {
         }
       ).subscribe(res => {
         console.log('Resposta:', res);
+        alert('Texto enviado com sucesso!');
+        this.texto = '';
       });
+
     }
   }

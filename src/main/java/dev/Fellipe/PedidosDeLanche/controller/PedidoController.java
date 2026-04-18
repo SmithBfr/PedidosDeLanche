@@ -31,6 +31,14 @@ public class PedidoController {
 
     }
 
+    @PutMapping("{id}")
+    public Long atualizarStatusPedido(@PathVariable Long id) {
+        service.atualizarStatusPedido(id);
+        return id;
+    }
+
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> buscarPedidoPorId(@PathVariable Long id) {
         Pedido pedido = service.buscarPedidoPorId(id);

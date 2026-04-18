@@ -41,9 +41,6 @@ public class PedidoService {
         pedidos.setValorTotal(calcularValorTotal(pedidos));
 
         Pedido pedidoSalvo = repository.save(pedidos);
-        pedidoProducer.enviarPedido(pedidoSalvo.getPedidoID());
-        System.out.println("SALVO ID: " + pedidoSalvo.getPedidoID());
-
         return pedidoSalvo;
     }
 
@@ -94,6 +91,11 @@ public class PedidoService {
 
         pedido.setStatus("ENTREGUE");
         repository.save(pedido);
+        pedidoProducer.enviarPedido(id);
+
     }
 
+    public void enviarPedidoParaFila(Long id) {
+        pedidoProducer.enviarPedido(id);
+    }
 }

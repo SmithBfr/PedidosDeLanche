@@ -20,7 +20,6 @@ public class PedidoConsumer {
                 mensagem.replaceAll("\\D", "")
         );
 
-
         pedidoService.atualizarStatusPedido(pedidoID);
     }
 

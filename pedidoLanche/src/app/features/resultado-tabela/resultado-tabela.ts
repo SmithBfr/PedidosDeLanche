@@ -24,5 +24,10 @@ export class ResultadoTabela implements OnInit {
       this.dados = res;
     });
   }
-}
 
+  atualizar() {
+    this.service.atualizar().subscribe((res: Pedido[]) => {
+      this.dados = res;
+    });
+}
+}
