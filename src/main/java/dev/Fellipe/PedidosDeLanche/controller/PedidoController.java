@@ -3,11 +3,14 @@ package dev.Fellipe.PedidosDeLanche.controller;
 import dev.Fellipe.PedidosDeLanche.service.PedidoService;
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/pedidos")
 @RequiredArgsConstructor
@@ -16,10 +19,10 @@ public class PedidoController {
     private final PedidoService service;
 
     @PostMapping(consumes = "text/plain")
-    public double criarPedido(@RequestBody String texto) {
+    public ResponseEntity<String> criarPedido(@RequestBody String texto) {
 
         if(texto.length() != 40) {
-            throw new IllegalArgumentException("O texto deve conter pelo exatamente 40 caracteres.");
+            throw new IllegalArgumentException("O texto deve conter exatamente 40 caracteres.");
         }
 
         String tipoLanche = texto.substring(0,10).trim();
@@ -38,7 +41,8 @@ public class PedidoController {
                 .status("RECEBIDO")
                 .build();
 
-        return service.calcularValorTotal(pedido);
+        service.criarPedido(pedido);
+        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
     }
 
     @GetMapping("/{id}")
