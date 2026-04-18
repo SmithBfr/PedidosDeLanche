@@ -20,24 +20,31 @@ public class PedidoService {
         this.pedidoProducer = producer;
     }
 
-    public void criarPedido(Pedido pedido) {
+    public Pedido criarPedido(String pedido) {
 
-        double valor = calcularValorTotal(pedido);
+        String tipoLanche = pedido.substring(0,10).trim();
+        String proteina = pedido.substring(10,20).trim();
+        String acompanhamento = pedido.substring(20,30).trim();
+        int quantidade = Integer.parseInt(pedido.substring(30,32).trim());
+        String bebida = pedido.substring(32,40).trim();
 
         Pedido pedidos = Pedido.builder()
-                .tipoLanche(pedido.getTipoLanche())
-                .proteina(pedido.getProteina())
-                .acompanhamento(pedido.getAcompanhamento())
-                .quantidade(pedido.getQuantidade())
+                .tipoLanche(tipoLanche)
+                .proteina(proteina)
+                .acompanhamento(acompanhamento)
+                .quantidade(quantidade)
+                .bebida(bebida)
+                .valorTotal(0.0)
                 .status("RECEBIDO")
                 .build();
 
-        pedidos.setValorTotal(valor);
+        pedidos.setValorTotal(calcularValorTotal(pedidos));
 
         Pedido pedidoSalvo = repository.save(pedidos);
         pedidoProducer.enviarPedido(pedidoSalvo.getPedidoID());
         System.out.println("SALVO ID: " + pedidoSalvo.getPedidoID());
 
+        return pedidoSalvo;
     }
 
     public double calcularValorTotal(Pedido pedido) {
