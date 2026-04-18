@@ -1,7 +1,8 @@
-package dev.Fellipe.PedidosDeLanche.business;
+package dev.Fellipe.PedidosDeLanche.service;
 
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
 import dev.Fellipe.PedidosDeLanche.infrastucture.repository.PedidoRepository;
+import dev.Fellipe.PedidosDeLanche.messaging.PedidoProducer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +11,13 @@ import java.util.List;
 public class PedidoService {
 
     private final PedidoRepository repository;
+    private final PedidoProducer pedidoProducer;
 
-    public PedidoService(PedidoRepository repository) {
+
+
+    public PedidoService(PedidoRepository repository, PedidoProducer producer) {
         this.repository = repository;
+        this.pedidoProducer = producer;
     }
 
     public void criarPedido(Pedido pedido) {
@@ -25,7 +30,7 @@ public class PedidoService {
                 .status("RECEBIDO")
                 .build();
 
-        repository.save(pedidos);
+
     }
 
     public double calcularValorTotal(Pedido pedido) {
@@ -54,7 +59,9 @@ public class PedidoService {
 
         pedido.setValorTotal(valorTipoLanche * pedido.getQuantidade());
 
-        repository.save(pedido);
+        Pedido pedidoSalvo = repository.save(pedido);
+        pedidoProducer.enviarPedido(pedidoSalvo.getPedidoID());
+        System.out.println("SALVO ID: " + pedidoSalvo.getPedidoID());
 
         return pedido.getValorTotal();
 
@@ -69,4 +76,13 @@ public class PedidoService {
     public List<Pedido> buscarTodosPedidos() {
         return repository.findAll();
     }
+
+    public void atualizarStatusPedido(Long id) {
+        Pedido pedido = repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Pedido não encontrado"));
+
+        pedido.setStatus("ENTREGUE");
+        repository.save(pedido);
+    }
+
 }

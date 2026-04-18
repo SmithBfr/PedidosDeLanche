@@ -1,6 +1,6 @@
 package dev.Fellipe.PedidosDeLanche.controller;
 
-import dev.Fellipe.PedidosDeLanche.business.PedidoService;
+import dev.Fellipe.PedidosDeLanche.service.PedidoService;
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
