@@ -2,6 +2,7 @@ package dev.Fellipe.PedidosDeLanche.infrastucture.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -18,20 +19,28 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pedidoID;
 
+    @Column(length = 20)
     private String tipoLanche;
 
+    @Column(length = 20)
     private String proteina;
 
+    @Column(length = 20)
     private String acompanhamento;
 
+    @Column(length = 20)
     private int quantidade;
 
+    @Column(length = 20)
     private String bebida;
 
+    @Column(precision = 10, scale = 2)
     private Double valorTotal;
 
+    @Column(length = 20)
     private String status;
 
+    @CreationTimestamp
     private LocalDateTime criadoEm = LocalDateTime.now();
 
 
