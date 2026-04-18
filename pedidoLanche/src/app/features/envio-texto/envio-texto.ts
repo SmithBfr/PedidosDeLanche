@@ -20,7 +20,6 @@ export class EnvioTexto {
 
       let texto = this.texto;
 
-        // garante 40 posições com espaço
         texto = texto.padEnd(40, ' ');
 
         console.log('Tamanho:', texto.length);

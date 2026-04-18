@@ -19,30 +19,16 @@ public class PedidoController {
     private final PedidoService service;
 
     @PostMapping(consumes = "text/plain")
-    public ResponseEntity<String> criarPedido(@RequestBody String texto) {
+    public ResponseEntity<Pedido> criarPedido(@RequestBody String texto) {
 
         if(texto.length() != 40) {
             throw new IllegalArgumentException("O texto deve conter exatamente 40 caracteres.");
         }
 
-        String tipoLanche = texto.substring(0,10).trim();
-        String proteina = texto.substring(10,20).trim();
-        String acompanhamento = texto.substring(20,30).trim();
-        int quantidade = Integer.parseInt(texto.substring(30,32).trim());
-        String bebida = texto.substring(32,40).trim();
+        Pedido pedidoCriado = service.criarPedido(texto);
 
-        Pedido pedido = Pedido.builder()
-                .tipoLanche(tipoLanche)
-                .proteina(proteina)
-                .acompanhamento(acompanhamento)
-                .quantidade(quantidade)
-                .bebida(bebida)
-                .criadoEm(java.time.LocalDateTime.now())
-                .status("RECEBIDO")
-                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(pedidoCriado);
 
-        service.criarPedido(pedido);
-        return ResponseEntity.status(HttpStatus.CREATED).body("OK");
     }
 
     @GetMapping("/{id}")
