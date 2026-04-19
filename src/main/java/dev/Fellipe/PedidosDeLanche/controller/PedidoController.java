@@ -33,7 +33,7 @@ public class PedidoController {
 
     @PutMapping("{id}")
     public Long atualizarStatusPedido(@PathVariable Long id) {
-        service.atualizarStatusPedido(id);
+        service.enviarParaFila(id);
         return id;
     }
 
@@ -51,5 +51,6 @@ public class PedidoController {
         List<Pedido> pedidos = service.buscarTodosPedidos();
         return ResponseEntity.ok(pedidos);
     }
+
 
 }

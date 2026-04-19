@@ -3,6 +3,7 @@ package dev.Fellipe.PedidosDeLanche.messaging;
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Component
 public class PedidoProducer {
@@ -13,17 +14,15 @@ public class PedidoProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void enviarPedido(Long pedidoID) {
-
-        String mensagem = "{\"pedidoId\": " + pedidoID + "}";
-
+    public void enviarPedido(Long id) {
 
         rabbitTemplate.convertAndSend(
                 "pedidos.exchange",
                 "pedidos.recebidos",
-                mensagem);
+                "{\"pedidoId\": " + id + "}"
+        );
 
-        System.out.println("ENVIANDO: " + mensagem);
+        System.out.println("ENVIANDO: " + id);
     }
 
 }

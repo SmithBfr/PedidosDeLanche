@@ -3,11 +3,13 @@ package dev.Fellipe.PedidosDeLanche.service;
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
 import dev.Fellipe.PedidosDeLanche.infrastucture.repository.PedidoRepository;
 import dev.Fellipe.PedidosDeLanche.messaging.PedidoProducer;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class PedidoService {
 
     private final PedidoRepository repository;
@@ -85,17 +87,22 @@ public class PedidoService {
         return repository.findAll();
     }
 
+
     public void atualizarStatusPedido(Long id) {
         Pedido pedido = repository.findById(id).orElseThrow(
                 () -> new RuntimeException("Pedido não encontrado"));
 
         pedido.setStatus("ENTREGUE");
+        System.out.println("Atualizando status do pedido " + id + " para ENTREGUE");
         repository.save(pedido);
-        pedidoProducer.enviarPedido(id);
 
     }
 
-    public void enviarPedidoParaFila(Long id) {
-        pedidoProducer.enviarPedido(id);
+    public void enviarParaFila(Long id) {
+        Pedido pedido = repository.findById(id).orElseThrow(
+                () -> new RuntimeException("Pedido não encontrado"));
+
+        pedidoProducer.enviarPedido(pedido.getPedidoID());
     }
+
 }
