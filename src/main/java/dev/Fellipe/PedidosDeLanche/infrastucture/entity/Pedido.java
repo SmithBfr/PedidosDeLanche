@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -34,8 +35,8 @@ public class Pedido {
     @Column(length = 20)
     private String bebida;
 
-
-    private Double valorTotal;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal valorTotal;
 
     @Column(length = 20)
     private String status;

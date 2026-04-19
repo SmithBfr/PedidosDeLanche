@@ -6,6 +6,7 @@ import dev.Fellipe.PedidosDeLanche.messaging.PedidoProducer;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -36,7 +37,7 @@ public class PedidoService {
                 .acompanhamento(acompanhamento)
                 .quantidade(quantidade)
                 .bebida(bebida)
-                .valorTotal(0.0)
+                .valorTotal(new BigDecimal(0.0))
                 .status("RECEBIDO")
                 .build();
 
@@ -46,9 +47,9 @@ public class PedidoService {
         return pedidoSalvo;
     }
 
-    public double calcularValorTotal(Pedido pedido) {
+    public BigDecimal calcularValorTotal(Pedido pedido) {
 
-        double valorTipoLanche = 0.0;
+        BigDecimal valorTipoLanche = new BigDecimal(0.0);
 
         String tipo = pedido.getTipoLanche();
         if (tipo != null) {
@@ -56,24 +57,26 @@ public class PedidoService {
         }
 
         if("hamburguer".equals(tipo)) {
-            valorTipoLanche = 20.0;
+            valorTipoLanche = new BigDecimal(20.0);
         } else if ("pastel".equals(tipo)) {
-            valorTipoLanche = 15.0;
+            valorTipoLanche = new BigDecimal(15.0);
         } else {
-            valorTipoLanche = 12.0;
+            valorTipoLanche = new BigDecimal(12.0);
         }
 
         if ("hamburguer".equalsIgnoreCase(pedido.getTipoLanche()) &&
                 "carne".equalsIgnoreCase(pedido.getProteina()) &&
                 "salada".equalsIgnoreCase(pedido.getAcompanhamento())) {
 
-            valorTipoLanche -= valorTipoLanche * 0.10;
+            valorTipoLanche = valorTipoLanche.subtract(
+                    valorTipoLanche.multiply(BigDecimal.valueOf(0.10))
+            );
         }
 
-        pedido.setValorTotal(valorTipoLanche * pedido.getQuantidade());
+        pedido.setValorTotal(valorTipoLanche.multiply(BigDecimal.valueOf(pedido.getQuantidade())));
 
 
-        return valorTipoLanche * pedido.getQuantidade();
+        return pedido.getValorTotal();
 
     }
 
