@@ -1,33 +1,51 @@
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>Tipo de Lanche</th>
-    <th>Proteina</th>
-    <th>Acompanhamento</th>
-    <th>Quantidade</th>
-    <th>Bebida</th>
-    <th>Valor</th>
-    <th>Status</th>
-    <th>Data de Criação</th>
-    <th>Ação</th>
-  </tr>
+<div class="container">
+  <div class="tabela-wrapper">
 
-  <tr *ngFor="let item of dados">
-    <td>{{ item.pedidoID }}</td>
-    <td>{{ item.tipoLanche}}</td>
-    <td>{{ item.proteina }}</td>
-    <td>{{ item.acompanhamento }}</td>
-    <td>{{ item.quantidade }}</td>
-    <td>{{ item.bebida }}</td>
-    <td>{{ item.valorTotal }}</td>
-    <td>{{ item.status }}</td>
-    <td>{{ item.criadoEm }}</td>
-    <td>
-      <button (click)="atualizarPedido(item.pedidoID)">
-        Atualizar
-      </button>
-    </td>
-  </tr>
-</table>
+    <h2>Pedidos</h2>
 
-<button (click)="carregar()">Carregar</button>
+
+    <div class="filtro">
+      <label>Status:</label>
+      <select [(ngModel)]="filtroStatus" (change)="aplicarFiltro()">
+        <option value="">Todos</option>
+        <option value="RECEBIDO">Recebido</option>
+        <option value="ENTREGUE">Entregue</option>
+      </select>
+
+      <button (click)="carregar()">Recarregar</button>
+    </div>
+
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Tipo</th>
+        <th>Proteína</th>
+        <th>Acompanhamento</th>
+        <th>Qtd</th>
+        <th>Bebida</th>
+        <th>Valor</th>
+        <th>Status</th>
+        <th>Data</th>
+        <th>Ação</th>
+      </tr>
+
+      <tr *ngFor="let item of dadosFiltrados">
+        <td>{{ item.pedidoID }}</td>
+        <td>{{ item.tipoLanche }}</td>
+        <td>{{ item.proteina }}</td>
+        <td>{{ item.acompanhamento }}</td>
+        <td>{{ item.quantidade }}</td>
+        <td>{{ item.bebida }}</td>
+        <td>{{ item.valorTotal }}</td>
+        <td>{{ item.status }}</td>
+        <td>{{ item.criadoEm }}</td>
+        <td>
+          <button (click)="atualizarPedido(item.pedidoID)">
+            Atualizar
+          </button>
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>
