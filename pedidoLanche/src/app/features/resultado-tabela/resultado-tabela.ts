@@ -25,9 +25,9 @@ export class ResultadoTabela implements OnInit {
     });
   }
 
-  atualizar() {
-    this.service.atualizar().subscribe((res: Pedido[]) => {
-      this.dados = res;
+  atualizarPedido(id: number) {
+    this.service.atualizar(id).subscribe(() => {
+      console.log('Pedido enviado para fila');
     });
-}
+  }
 }

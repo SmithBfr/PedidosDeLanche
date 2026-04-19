@@ -1,5 +1,5 @@
 export interface Pedido {
-  id: number;
+  pedidoID: number;
   nome: string;
   tipoLanche: string;
   proteina: string;

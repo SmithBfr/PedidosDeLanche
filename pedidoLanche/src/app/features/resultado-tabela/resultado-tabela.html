@@ -9,10 +9,11 @@
     <th>Valor</th>
     <th>Status</th>
     <th>Data de Criação</th>
+    <th>Ação</th>
   </tr>
 
   <tr *ngFor="let item of dados">
-    <td>{{ item.id }}</td>
+    <td>{{ item.pedidoID }}</td>
     <td>{{ item.tipoLanche}}</td>
     <td>{{ item.proteina }}</td>
     <td>{{ item.acompanhamento }}</td>
@@ -21,9 +22,12 @@
     <td>{{ item.valorTotal }}</td>
     <td>{{ item.status }}</td>
     <td>{{ item.criadoEm }}</td>
+    <td>
+      <button (click)="atualizarPedido(item.pedidoID)">
+        Atualizar
+      </button>
+    </td>
   </tr>
 </table>
 
 <button (click)="carregar()">Carregar</button>
-<button (click)="atualizar()">Atualizar</button>
-

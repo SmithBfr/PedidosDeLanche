@@ -17,8 +17,8 @@ export class PedidoService {
     return this.http.get<Pedido[]>(this.api);
   }
 
-  atualizar(): Observable<Pedido[]> {
-    return this.http.get<Pedido[]>(this.api);
+  atualizar(id: number): Observable<any> {
+    return this.http.put(`${this.api}/${id}`, {});
   }
 
 }
