@@ -1,16 +1,23 @@
 package dev.Fellipe.PedidosDeLanche.service;
 
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
+import dev.Fellipe.PedidosDeLanche.infrastucture.parser.CnabParser;
+import dev.Fellipe.PedidosDeLanche.infrastucture.repository.PedidoRepository;
+import dev.Fellipe.PedidosDeLanche.messaging.PedidoProducer;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 class PedidoServiceTest {
 
     private PedidoService pedidoService = new PedidoService(null, null);
+    private final CnabParser parser = new CnabParser();
 
     @Test
     void deveCalcularValorTotalSemDesconto() {
@@ -52,6 +59,21 @@ class PedidoServiceTest {
 
         BigDecimal valorTotal = pedidoService.calcularValorTotal(pedido);
         assertEquals(2, valorTotal.scale());
+    }
+
+    @Test
+    void deveCriarPedido() {
+        PedidoRepository repo = mock(PedidoRepository.class);
+        PedidoProducer producer = mock(PedidoProducer.class);
+
+        PedidoService service = new PedidoService(repo, producer);
+
+        when(repo.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        Pedido pedido = service.criarPedido("hamburguercarne     salada    02coca");
+
+        assertEquals("RECEBIDO", pedido.getStatus());
+        assertEquals(2, pedido.getQuantidade());
     }
 
 }

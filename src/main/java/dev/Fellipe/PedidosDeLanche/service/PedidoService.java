@@ -26,59 +26,10 @@ public class PedidoService {
         this.pedidoProducer = producer;
     }
 
-//    public String formatarPedido(String pedido) {
-//
-//        if(pedido == null){
-//            pedido = "";
-//        }
-//
-//        if (pedido.length() > 40) {
-//            throw new IllegalArgumentException("O texto deve conter no máximo 40 caracteres.");
-//        }
-//
-//        int[] tamanhos = {10, 10, 10, 2, 8};
-//        boolean[] numericos = {false, false, false, true, false};
-//
-//        int pos = 0;
-//        StringBuilder pedidoFormatado = new StringBuilder();
-//
-//        for (int i = 0; i < tamanhos.length; i++) {
-//
-//            int tamanho = tamanhos[i];
-//
-//            int fim = Math.min(pos + tamanho, pedido.length());
-//            String parte = "";
-//
-//            if (pos < pedido.length()) {
-//                parte = pedido.substring(pos, fim);
-//            }
-//
-//            pedidoFormatado.append(ajustarTamanho(parte, tamanho, numericos[i]));
-//            pos += tamanho;
-//        }
-//
-//        return pedidoFormatado.toString();
-//    }
-//
-//    private String ajustarTamanho(String parte, int tamanho, boolean numerico) {
-//        StringBuilder resultado = new StringBuilder(parte);
-//
-//        while (resultado.length() < tamanho) {
-//            if (numerico) {
-//                resultado.insert(0, "0");
-//            } else {
-//                resultado.append(" ");
-//            }
-//        }
-//
-//        System.out.println("Parte ajustada: '" + resultado.toString() + "'");
-//        return resultado.toString();
-//    }
 
     public Pedido criarPedido(String entrada) {
 
         Pedido pedido = parser.parse(entrada);
-
         pedido.setValorTotal(calcularValorTotal(pedido));
         pedido.setStatus("RECEBIDO");
 

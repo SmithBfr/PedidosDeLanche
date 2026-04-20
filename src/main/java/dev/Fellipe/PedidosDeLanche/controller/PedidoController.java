@@ -22,7 +22,7 @@ public class PedidoController {
     public ResponseEntity<Pedido> criarPedido(@RequestBody String texto) {
 
         if(texto.length() > 40) {
-            throw new IllegalArgumentException("O texto deve conter até 40 caracteres.");
+            throw new IllegalArgumentException("O texto deve conter no máximo 40 caracteres.");
         }
 
         Pedido pedidoCriado = service.criarPedido(texto);
@@ -36,7 +36,6 @@ public class PedidoController {
         service.enviarParaFila(id);
         return id;
     }
-
 
 
     @GetMapping("/{id}")

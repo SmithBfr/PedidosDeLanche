@@ -74,11 +74,11 @@ public class CnabParser {
         }
 
         return Pedido.builder()
-                .tipoLanche(tipoLanche)
-                .proteina(proteina)
-                .acompanhamento(acompanhamento)
+                .tipoLanche(tipoLanche.toUpperCase())
+                .proteina(proteina.toUpperCase())
+                .acompanhamento(acompanhamento.toUpperCase())
                 .quantidade(quantidade)
-                .bebida(bebida)
+                .bebida(bebida.toUpperCase())
                 .build();
 
     }
