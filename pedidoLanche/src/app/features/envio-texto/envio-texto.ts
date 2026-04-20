@@ -20,9 +20,14 @@ export class EnvioTexto {
 
       let texto = this.texto;
 
-        if (texto.length != 40) {
-           alert('O texto deve conter exatamente 40 caracteres.');
-           return;
+      if(texto === null){
+        alert('O campo de texto não pode estar vazio!');
+        return;
+      }else if(texto.length > 40){
+        alert('O texto não pode conter mais de 40 caracteres!');
+        return;
+      }else{
+        alert('Texto enviado com sucesso!');
         }
 
       console.log('Tamanho:', texto.length);

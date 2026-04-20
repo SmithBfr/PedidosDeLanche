@@ -1,5 +1,6 @@
 package dev.Fellipe.PedidosDeLanche.infrastucture.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,6 +43,7 @@ public class Pedido {
     private String status;
 
     @CreationTimestamp
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime criadoEm = LocalDateTime.now();
 
 
