@@ -1,9 +1,11 @@
 package dev.Fellipe.PedidosDeLanche.service;
 
 import dev.Fellipe.PedidosDeLanche.infrastucture.entity.Pedido;
+import dev.Fellipe.PedidosDeLanche.infrastucture.parser.CnabParser;
 import dev.Fellipe.PedidosDeLanche.infrastucture.repository.PedidoRepository;
 import dev.Fellipe.PedidosDeLanche.messaging.PedidoProducer;
 import jakarta.transaction.Transactional;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -15,6 +17,7 @@ public class PedidoService {
 
     private final PedidoRepository repository;
     private final PedidoProducer pedidoProducer;
+    private final CnabParser parser = new CnabParser();
 
 
 
@@ -23,28 +26,63 @@ public class PedidoService {
         this.pedidoProducer = producer;
     }
 
-    public Pedido criarPedido(String pedido) {
+//    public String formatarPedido(String pedido) {
+//
+//        if(pedido == null){
+//            pedido = "";
+//        }
+//
+//        if (pedido.length() > 40) {
+//            throw new IllegalArgumentException("O texto deve conter no máximo 40 caracteres.");
+//        }
+//
+//        int[] tamanhos = {10, 10, 10, 2, 8};
+//        boolean[] numericos = {false, false, false, true, false};
+//
+//        int pos = 0;
+//        StringBuilder pedidoFormatado = new StringBuilder();
+//
+//        for (int i = 0; i < tamanhos.length; i++) {
+//
+//            int tamanho = tamanhos[i];
+//
+//            int fim = Math.min(pos + tamanho, pedido.length());
+//            String parte = "";
+//
+//            if (pos < pedido.length()) {
+//                parte = pedido.substring(pos, fim);
+//            }
+//
+//            pedidoFormatado.append(ajustarTamanho(parte, tamanho, numericos[i]));
+//            pos += tamanho;
+//        }
+//
+//        return pedidoFormatado.toString();
+//    }
+//
+//    private String ajustarTamanho(String parte, int tamanho, boolean numerico) {
+//        StringBuilder resultado = new StringBuilder(parte);
+//
+//        while (resultado.length() < tamanho) {
+//            if (numerico) {
+//                resultado.insert(0, "0");
+//            } else {
+//                resultado.append(" ");
+//            }
+//        }
+//
+//        System.out.println("Parte ajustada: '" + resultado.toString() + "'");
+//        return resultado.toString();
+//    }
 
-        String tipoLanche = pedido.substring(0,10).trim();
-        String proteina = pedido.substring(10,20).trim();
-        String acompanhamento = pedido.substring(20,30).trim();
-        int quantidade = Integer.parseInt(pedido.substring(30,32).trim());
-        String bebida = pedido.substring(32,40).trim();
+    public Pedido criarPedido(String entrada) {
 
-        Pedido pedidos = Pedido.builder()
-                .tipoLanche(tipoLanche)
-                .proteina(proteina)
-                .acompanhamento(acompanhamento)
-                .quantidade(quantidade)
-                .bebida(bebida)
-                .valorTotal(new BigDecimal(0.0))
-                .status("RECEBIDO")
-                .build();
+        Pedido pedido = parser.parse(entrada);
 
-        pedidos.setValorTotal(calcularValorTotal(pedidos));
+        pedido.setValorTotal(calcularValorTotal(pedido));
+        pedido.setStatus("RECEBIDO");
 
-        Pedido pedidoSalvo = repository.save(pedidos);
-        return pedidoSalvo;
+        return repository.save(pedido);
     }
 
     public BigDecimal calcularValorTotal(Pedido pedido) {
@@ -73,8 +111,11 @@ public class PedidoService {
             );
         }
 
-        pedido.setValorTotal(valorTipoLanche.multiply(BigDecimal.valueOf(pedido.getQuantidade())));
+        valorTipoLanche = valorTipoLanche.multiply(BigDecimal.valueOf(pedido.getQuantidade()));
 
+        valorTipoLanche = valorTipoLanche.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        pedido.setValorTotal(valorTipoLanche);
 
         return pedido.getValorTotal();
 
